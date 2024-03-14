@@ -1,0 +1,24 @@
+.weather {
+    .container {
+      .card {
+        box-shadow: 2px 4px 5px 3px rgba(8, 10, 20, 8); 
+        .card-body {
+            text-align: center;
+          .card-title {
+            font-size: 1.25rem; 
+            margin-bottom: 1rem; 
+          }
+          .weather-icon {
+            width: 100px; 
+            height: auto; 
+          }
+          .weatherCity{
+            font-size: 35px;
+            margin-top: 2px;
+          }
+          
+        }
+      }
+    }
+  }
+  
