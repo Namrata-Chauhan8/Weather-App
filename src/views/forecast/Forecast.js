@@ -1,25 +1,16 @@
-import React, { useEffect, useState } from "react";
-import { apiKey } from "../../constants/Constants";
-import "./Forecast.scss";
-import axios from "axios";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchForecast } from "../../redux/action/Actions";
+import { imageUrl } from "../../constants/Constants";
+import "../../assets/Forecast.scss";
 
 const Forecast = ({ city, isCelsius }) => {
-  const [forecastData, setForecastData] = useState([]);
+  const dispatch = useDispatch();
+  const forecastData = useSelector((state) => state.forecast.forecastData);
 
   useEffect(() => {
-    const fetchForecast = async () => {
-      try {
-        const response = await axios.get(
-          `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}`
-        );
-        setForecastData(response.data.list);
-      } catch (error) {
-        console.error("Error fetching forecast data:", error);
-      }
-    };
-
-    fetchForecast();
-  }, [city]);
+    dispatch(fetchForecast(city));
+  }, [dispatch, city]);
 
   const forecastByDay = (forecastList) => {
     const groupedForecast = {};
@@ -55,11 +46,12 @@ const Forecast = ({ city, isCelsius }) => {
                 {forecastByDay(forecastData)[date].map((forecast, id) => (
                   <div key={id} className="card border-info mb-3">
                     <div className="card-header">
-                      <b>Time: </b>{forecast.dt_txt.split(" ")[1]}
+                      <b>Time: </b>
+                      {forecast.dt_txt.split(" ")[1]}
                     </div>
                     <div className="card-body">
                       <img
-                        src={`http://openweathermap.org/img/w/${forecast.weather[0].icon}.png`}
+                        src={`${imageUrl}${forecast.weather[0].icon}.png`}
                         alt="Weather Icon"
                         className="weather-icon"
                       />

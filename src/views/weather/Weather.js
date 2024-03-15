@@ -1,43 +1,25 @@
 import React, { useEffect, useState } from "react";
-import { apiKey, errorMessage } from "../../constants/Constants";
+import {  errorMessage ,imageUrl} from "../../constants/Constants";
 import { BsToggle2On, BsToggle2Off } from "react-icons/bs";
+import { fetchWeather } from "../../redux/action/Actions";
+import { useDispatch, useSelector } from "react-redux";
 import Forecast from "../forecast/Forecast";
-import axios from "axios";
-import "./Weather.scss";
+import "../../assets/Weather.scss";
 
 const Weather = () => {
-  const [weatherData, setWeatherData] = useState(null);
+  const dispatch = useDispatch();
+  const weatherData = useSelector(state => state.weather.weatherData);
   const [city, setCity] = useState("Gandhinagar");
   const [isCelsius, setIsCelsius] = useState(true);
-  const weatherInfo = (cityName) => {
-    if (!cityName) {
-      return;
-    }
-    const url = `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${apiKey}`;
-    axios
-      .get(url)
-      .then((res) => {
-        const temperature = isCelsius
-          ? celcius(res.data.main.temp)
-          : fahrenheit(res.data.main.temp);
-        setWeatherData({
-          temperature: temperature,
-          humidity: res.data.main.humidity,
-          city: res.data.name,
-          description: res.data.weather[0].description,
-          weatherIcon: res.data.weather[0].icon,
-          windSpeed: res.data.wind.speed,
-        });
-      })
-      .catch((error) => {
-        console.log("error", error);
-        setWeatherData(null);
-      });
-  };
 
   useEffect(() => {
-    weatherInfo(city);
-  }, [city]);
+    dispatch(fetchWeather(city, isCelsius)); 
+  }, [dispatch, city, isCelsius]);    
+
+
+  useEffect(() => {
+    dispatch(fetchWeather(city, isCelsius)); 
+  }, [dispatch, city, isCelsius]);
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -46,13 +28,7 @@ const Weather = () => {
     setCity(searchCity);
   };
 
-  const celcius = (kelvin) => {
-    return Math.floor(kelvin - 273.15);
-  };
-
-  const fahrenheit = (kelvin) => {
-    return Math.floor(((kelvin - 273.15) * 9) / 5 + 32);
-  };
+  
 
   const toggleTemperatureUnit = () => {
     setIsCelsius(!isCelsius);
@@ -77,7 +53,7 @@ const Weather = () => {
           {weatherData && (
             <div className="card-body">
               <img
-                src={`http://openweathermap.org/img/w/${weatherData.weatherIcon}.png`}
+                src={`${imageUrl}${weatherData.weatherIcon}.png`}
                 alt="Weather Icon"
                 className="weather-icon"
               />
@@ -91,7 +67,7 @@ const Weather = () => {
                   <b>Temperature:</b> {weatherData.temperature}{" "}
                   {isCelsius ? "°C" : "°F"}
                   <div className="toggler m-3">
-                    Fehrenhit
+                  fahrenheit
                     {isCelsius ? (
                       <BsToggle2On
                         className="toggler m-3"
