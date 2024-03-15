@@ -1,0 +1,42 @@
+.container2{
+    margin: auto;
+}
+
+.forecast-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-gap: 12px; 
+  
+    .forecast-column {
+        flex: 1;
+    }
+}
+.weather-icon {
+    display: block;
+    margin: 0 auto; 
+    width: 80px;
+    height: auto;
+}
+
+@media screen and (max-width: 1669px) {
+    .forecast-grid {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    }
+
+    .table {
+        font-size: x-small; 
+        width: 100%; 
+    }
+
+    .table tr,
+    .table td {
+        padding: 5px;
+        text-align: left; 
+        border: 1px solid #ccc; 
+    }
+}
+
+
+
+
+

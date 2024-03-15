@@ -1,4 +1,4 @@
-import Weather from './assets/Weather';
+import Weather from './assets/weather/Weather';
 
 function App() {
   return (
